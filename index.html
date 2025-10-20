@@ -17,6 +17,7 @@
 
         function IDVLoremIpsum() {
             const [mode, setMode] = useState('paragraphs');
+            const [sentenceLength, setSentenceLength] = useState('brief');
             const [count, setCount] = useState(3);
             const [generatedText, setGeneratedText] = useState('');
             const [copied, setCopied] = useState(false);
@@ -107,17 +108,14 @@
                 "Continuous Identity Monitoring"
             ];
 
-            const shortSentences = [
+            const briefSentences = [
                 "Verify identity in under 2 minutes",
                 "Upload ID and take a selfie",
-                "Biometric matching in real-time",
                 "Bank-level encryption standards",
                 "Compliant with global regulations",
                 "Liveness detection prevents fraud",
-                "Automated document extraction",
                 "Instant verification results",
                 "Mobile-friendly verification flow",
-                "Secure data handling protocols",
                 "Multi-language support available",
                 "24/7 verification processing",
                 "AI-powered fraud detection",
@@ -125,29 +123,72 @@
                 "Support for 200+ countries",
                 "99.9% accuracy rate achieved",
                 "No manual review needed",
-                "One-time verification process",
-                "Reusable digital credentials",
                 "Privacy by design approach",
                 "GDPR and CCPA compliant",
                 "Facial recognition technology",
                 "Document tampering detection",
                 "Age verification included",
-                "Address confirmation service",
-                "Background check integration",
-                "Device fingerprint analysis",
-                "Geolocation verification",
-                "Electronic signature capture",
                 "Real-time status updates",
-                "White-label solution available",
                 "Custom workflow configuration",
                 "Advanced analytics dashboard",
-                "Sanctions list screening",
-                "PEP database checks",
-                "Watchlist monitoring service",
-                "Credit bureau integration",
                 "Risk scoring algorithms",
-                "Adaptive security measures",
                 "Zero-trust architecture"
+            ];
+
+            const standardSentences = [
+                "Complete identity verification in under 2 minutes with our streamlined process",
+                "Upload your government ID and capture a quick selfie to get started",
+                "Biometric matching technology compares your selfie with your ID photo",
+                "All personal data is encrypted using bank-level security standards",
+                "Our platform complies with KYC and AML regulations in 200+ countries",
+                "Advanced liveness detection prevents fraud attempts and spoofing attacks",
+                "Automated document verification eliminates the need for manual review",
+                "Receive instant verification results with real-time processing capabilities",
+                "Mobile-optimized interface works seamlessly across all devices and platforms",
+                "Secure data handling protocols ensure your information is always protected",
+                "Multi-language support makes verification accessible to global users",
+                "Our 24/7 processing system handles verification requests around the clock",
+                "AI-powered fraud detection identifies suspicious patterns and activities",
+                "Simple API integration enables quick deployment in your application",
+                "Document support includes passports, driver's licenses, and national IDs",
+                "Achieve 99.9% accuracy rates with our advanced verification algorithms",
+                "Privacy-first architecture puts users in control of their personal data",
+                "GDPR and CCPA compliance ensures adherence to global privacy standards",
+                "Facial recognition technology provides secure and contactless authentication",
+                "Document tampering detection identifies forged or altered identification",
+                "Age verification features confirm users meet minimum age requirements",
+                "Real-time status updates keep users informed throughout the process",
+                "Customizable workflows adapt to your specific verification requirements",
+                "Comprehensive analytics dashboard provides insights into verification metrics",
+                "Risk-based scoring helps you make informed decisions about user access"
+            ];
+
+            const detailedSentences = [
+                "Complete your identity verification in under 2 minutes with our intuitive, step-by-step process that guides you through each stage",
+                "Upload a clear photo of your government-issued ID and capture a quick selfie using your device's camera to begin verification",
+                "Our advanced biometric matching technology automatically compares your live selfie with the photo on your ID document to confirm your identity",
+                "All personal information and documents are encrypted end-to-end using bank-level security standards to protect your sensitive data",
+                "Our platform maintains compliance with international KYC and AML regulations across more than 200 countries and jurisdictions worldwide",
+                "Sophisticated liveness detection technology analyzes subtle facial movements and micro-expressions to prevent fraud attempts and spoofing attacks",
+                "Automated document verification uses advanced OCR technology to extract and validate information, eliminating the need for time-consuming manual review",
+                "Receive instant verification results through our real-time processing system that analyzes documents and biometrics in seconds",
+                "Our mobile-optimized verification interface provides a seamless experience across smartphones, tablets, and desktop devices with responsive design",
+                "Industry-leading data handling protocols and secure infrastructure ensure your personal information remains confidential and protected at all times",
+                "Multi-language support in over 40 languages makes our verification process accessible and user-friendly for a global audience",
+                "Our 24/7 automated processing system continuously handles verification requests around the clock without downtime or delays",
+                "AI-powered fraud detection algorithms analyze multiple data points and behavioral patterns to identify and flag suspicious activities in real-time",
+                "Developer-friendly API integration with comprehensive documentation enables quick and seamless deployment within your existing application infrastructure",
+                "Broad document support accepts various ID types including passports, driver's licenses, national identity cards, and residence permits from countries worldwide",
+                "Our verification system consistently achieves accuracy rates above 99.9% through continuous improvements in machine learning models and validation processes",
+                "Privacy-first architecture with decentralized data storage gives users complete control over their personal information and consent preferences",
+                "Full GDPR and CCPA compliance with built-in data protection features ensures your platform meets stringent global privacy regulations and standards",
+                "State-of-the-art facial recognition technology provides secure, contactless authentication that's faster and more reliable than traditional verification methods",
+                "Advanced document tampering detection uses forensic analysis techniques to identify forged, altered, or fraudulent identification documents",
+                "Built-in age verification features automatically calculate and confirm that users meet minimum age requirements for age-restricted services and products",
+                "Real-time status updates and notifications keep both users and administrators informed throughout each stage of the verification process",
+                "Fully customizable verification workflows can be tailored to match your specific business requirements, risk tolerance, and compliance needs",
+                "Comprehensive analytics dashboard provides detailed insights into verification completion rates, conversion metrics, and fraud detection statistics",
+                "Intelligent risk-based scoring system evaluates multiple factors to help you make informed decisions about granting or restricting user access"
             ];
 
             const generateParagraphs = () => {
@@ -177,7 +218,15 @@
 
             const generateShortSentences = () => {
                 let text = '';
-                const shuffled = [...shortSentences].sort(() => 0.5 - Math.random());
+                let sourceArray = briefSentences;
+                
+                if (sentenceLength === 'standard') {
+                    sourceArray = standardSentences;
+                } else if (sentenceLength === 'detailed') {
+                    sourceArray = detailedSentences;
+                }
+                
+                const shuffled = [...sourceArray].sort(() => 0.5 - Math.random());
                 for (let i = 0; i < Math.min(count, shuffled.length); i++) {
                     text += shuffled[i] + '\n';
                 }
@@ -204,7 +253,7 @@
 
             useEffect(() => {
                 generateText();
-            }, [mode]);
+            }, [mode, sentenceLength]);
 
             const getLabel = () => {
                 if (mode === 'paragraphs') return 'Number of Paragraphs';
@@ -261,9 +310,55 @@
                                             : 'text-gray-600 hover:text-gray-900'
                                     }`}
                                 >
-                                    Short Sentences
+                                    Sentences
                                 </button>
                             </div>
+
+                            {/* Sentence Length Options - Only show for Sentences mode */}
+                            {mode === 'sentences' && (
+                                <div className="mb-6">
+                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                        Sentence Length
+                                    </label>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => setSentenceLength('brief')}
+                                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                                                sentenceLength === 'brief'
+                                                    ? 'bg-indigo-600 text-white shadow-md'
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            Brief
+                                        </button>
+                                        <button
+                                            onClick={() => setSentenceLength('standard')}
+                                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                                                sentenceLength === 'standard'
+                                                    ? 'bg-indigo-600 text-white shadow-md'
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            Standard
+                                        </button>
+                                        <button
+                                            onClick={() => setSentenceLength('detailed')}
+                                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                                                sentenceLength === 'detailed'
+                                                    ? 'bg-indigo-600 text-white shadow-md'
+                                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            }`}
+                                        >
+                                            Detailed
+                                        </button>
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-2">
+                                        {sentenceLength === 'brief' && '4-8 words per sentence'}
+                                        {sentenceLength === 'standard' && '10-15 words per sentence'}
+                                        {sentenceLength === 'detailed' && '20-30 words per sentence'}
+                                    </p>
+                                </div>
+                            )}
 
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="flex-1">
@@ -317,8 +412,8 @@
                             <ul className="text-sm text-gray-700 space-y-1">
                                 <li>• <strong>Paragraphs:</strong> For body content, feature descriptions, and detailed explanations</li>
                                 <li>• <strong>Titles:</strong> For headlines, feature names, and section headers</li>
-                                <li>• <strong>Short Sentences:</strong> For bullet points, feature lists, and quick highlights</li>
-                                <li>• Perfect for mockups of onboarding flows, KYC interfaces, and verification screens</li>
+                                <li>• <strong>Sentences:</strong> For bullet points, feature lists, and highlights</li>
+                                <li>• <strong>Sentence Length:</strong> Choose Brief for tags, Standard for lists, Detailed for descriptions</li>
                             </ul>
                         </div>
                     </div>
