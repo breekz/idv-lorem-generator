@@ -16,7 +16,8 @@
         const { useState, useEffect } = React;
 
         function IDVLoremIpsum() {
-            const [paragraphs, setParagraphs] = useState(3);
+            const [mode, setMode] = useState('paragraphs');
+            const [count, setCount] = useState(3);
             const [generatedText, setGeneratedText] = useState('');
             const [copied, setCopied] = useState(false);
 
@@ -63,11 +64,97 @@
                 "Verification analytics help optimize conversion rates and user experience."
             ];
 
-            const generateText = () => {
+            const titles = [
+                "Verify Your Identity in Seconds",
+                "Seamless KYC Onboarding",
+                "Advanced Biometric Authentication",
+                "Secure Document Verification",
+                "Real-Time Identity Proofing",
+                "Fraud Prevention Technology",
+                "Compliant Identity Solutions",
+                "Fast & Secure Verification",
+                "Digital Identity Platform",
+                "Automated KYC Processing",
+                "Smart Liveness Detection",
+                "Trusted Identity Verification",
+                "Global Compliance Made Easy",
+                "Instant Account Approval",
+                "Next-Gen Authentication",
+                "Secure User Onboarding",
+                "Identity Verification API",
+                "Biometric Security Solutions",
+                "Streamlined KYC Workflow",
+                "Enterprise Identity Platform",
+                "Privacy-First Verification",
+                "Multi-Factor Authentication",
+                "Document Authentication System",
+                "Intelligent Fraud Detection",
+                "Verified Digital Identity",
+                "Secure Identity Gateway",
+                "Risk-Based Authentication",
+                "Passwordless Verification",
+                "Decentralized Identity Network",
+                "Face Recognition Technology",
+                "Age Verification Service",
+                "Address Confirmation Tool",
+                "Sanctions Screening Platform",
+                "Identity Data Protection",
+                "Verification Dashboard Analytics",
+                "Reusable Identity Credentials",
+                "Mobile Identity Verification",
+                "Bank-Grade Security Standards",
+                "Adaptive Authentication Flow",
+                "Continuous Identity Monitoring"
+            ];
+
+            const shortSentences = [
+                "Verify identity in under 2 minutes",
+                "Upload ID and take a selfie",
+                "Biometric matching in real-time",
+                "Bank-level encryption standards",
+                "Compliant with global regulations",
+                "Liveness detection prevents fraud",
+                "Automated document extraction",
+                "Instant verification results",
+                "Mobile-friendly verification flow",
+                "Secure data handling protocols",
+                "Multi-language support available",
+                "24/7 verification processing",
+                "AI-powered fraud detection",
+                "Seamless API integration",
+                "Support for 200+ countries",
+                "99.9% accuracy rate achieved",
+                "No manual review needed",
+                "One-time verification process",
+                "Reusable digital credentials",
+                "Privacy by design approach",
+                "GDPR and CCPA compliant",
+                "Facial recognition technology",
+                "Document tampering detection",
+                "Age verification included",
+                "Address confirmation service",
+                "Background check integration",
+                "Device fingerprint analysis",
+                "Geolocation verification",
+                "Electronic signature capture",
+                "Real-time status updates",
+                "White-label solution available",
+                "Custom workflow configuration",
+                "Advanced analytics dashboard",
+                "Sanctions list screening",
+                "PEP database checks",
+                "Watchlist monitoring service",
+                "Credit bureau integration",
+                "Risk scoring algorithms",
+                "Adaptive security measures",
+                "Zero-trust architecture"
+            ];
+
+            const generateParagraphs = () => {
                 let text = '';
                 const sentencesPerParagraph = 4 + Math.floor(Math.random() * 3);
                 
-                for (let i = 0; i < paragraphs; i++) {
+                for (let i = 0; i < count; i++) {
                     let paragraph = '';
                     for (let j = 0; j < sentencesPerParagraph; j++) {
                         const randomSentence = sentences[Math.floor(Math.random() * sentences.length)];
@@ -76,7 +163,37 @@
                     text += paragraph.trim() + '\n\n';
                 }
                 
-                setGeneratedText(text.trim());
+                return text.trim();
+            };
+
+            const generateTitles = () => {
+                let text = '';
+                const shuffled = [...titles].sort(() => 0.5 - Math.random());
+                for (let i = 0; i < Math.min(count, shuffled.length); i++) {
+                    text += shuffled[i] + '\n';
+                }
+                return text.trim();
+            };
+
+            const generateShortSentences = () => {
+                let text = '';
+                const shuffled = [...shortSentences].sort(() => 0.5 - Math.random());
+                for (let i = 0; i < Math.min(count, shuffled.length); i++) {
+                    text += shuffled[i] + '\n';
+                }
+                return text.trim();
+            };
+
+            const generateText = () => {
+                let text = '';
+                if (mode === 'paragraphs') {
+                    text = generateParagraphs();
+                } else if (mode === 'titles') {
+                    text = generateTitles();
+                } else if (mode === 'sentences') {
+                    text = generateShortSentences();
+                }
+                setGeneratedText(text);
             };
 
             const copyToClipboard = () => {
@@ -87,7 +204,19 @@
 
             useEffect(() => {
                 generateText();
-            }, []);
+            }, [mode]);
+
+            const getLabel = () => {
+                if (mode === 'paragraphs') return 'Number of Paragraphs';
+                if (mode === 'titles') return 'Number of Titles';
+                return 'Number of Sentences';
+            };
+
+            const getMaxCount = () => {
+                if (mode === 'paragraphs') return 10;
+                if (mode === 'titles') return 20;
+                return 20;
+            };
 
             return (
                 <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-8">
@@ -102,17 +231,51 @@
                         </div>
 
                         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+                            {/* Mode Tabs */}
+                            <div className="flex gap-2 mb-6 border-b border-gray-200">
+                                <button
+                                    onClick={() => setMode('paragraphs')}
+                                    className={`px-4 py-2 font-medium transition-colors ${
+                                        mode === 'paragraphs'
+                                            ? 'text-indigo-600 border-b-2 border-indigo-600'
+                                            : 'text-gray-600 hover:text-gray-900'
+                                    }`}
+                                >
+                                    Paragraphs
+                                </button>
+                                <button
+                                    onClick={() => setMode('titles')}
+                                    className={`px-4 py-2 font-medium transition-colors ${
+                                        mode === 'titles'
+                                            ? 'text-indigo-600 border-b-2 border-indigo-600'
+                                            : 'text-gray-600 hover:text-gray-900'
+                                    }`}
+                                >
+                                    Titles
+                                </button>
+                                <button
+                                    onClick={() => setMode('sentences')}
+                                    className={`px-4 py-2 font-medium transition-colors ${
+                                        mode === 'sentences'
+                                            ? 'text-indigo-600 border-b-2 border-indigo-600'
+                                            : 'text-gray-600 hover:text-gray-900'
+                                    }`}
+                                >
+                                    Short Sentences
+                                </button>
+                            </div>
+
                             <div className="flex items-center gap-4 mb-6">
                                 <div className="flex-1">
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Number of Paragraphs
+                                        {getLabel()}
                                     </label>
                                     <input
                                         type="number"
                                         min="1"
-                                        max="10"
-                                        value={paragraphs}
-                                        onChange={(e) => setParagraphs(parseInt(e.target.value) || 1)}
+                                        max={getMaxCount()}
+                                        value={count}
+                                        onChange={(e) => setCount(parseInt(e.target.value) || 1)}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                                     />
                                 </div>
@@ -152,10 +315,10 @@
                                 Usage Tips
                             </h2>
                             <ul className="text-sm text-gray-700 space-y-1">
+                                <li>• <strong>Paragraphs:</strong> For body content, feature descriptions, and detailed explanations</li>
+                                <li>• <strong>Titles:</strong> For headlines, feature names, and section headers</li>
+                                <li>• <strong>Short Sentences:</strong> For bullet points, feature lists, and quick highlights</li>
                                 <li>• Perfect for mockups of onboarding flows, KYC interfaces, and verification screens</li>
-                                <li>• Use in wireframes, prototypes, and design presentations</li>
-                                <li>• All text is verification-themed to maintain context in your designs</li>
-                                <li>• Generate new text anytime to get fresh variations</li>
                             </ul>
                         </div>
                     </div>
